@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ee5a24;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #333;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #ee5a24;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #ee5a24;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff6b6b;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-message h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .welcome-message p {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .user-greeting {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .user-greeting h2 {
+            margin-bottom: 10px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #ee5a24;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            max-width: 80px;
+            max-height: 80px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav">
+            <div class="logo">StepStyle</div>
+            <div class="user-info">
+                <span class="user-name">{{ user_name }}</span>
+                <a href="/logout" class="logout-btn">Выйти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="user-greeting">
+            <h2>С возвращением, {{ user_name }}!</h2>
+            <p>Ваш статус: <strong>{{ user_status or 'Информация недоступна' }}</strong></p>
+        </div>
+
+        <h3 style="text-align: center; margin: 30px 0 20px;">Ассортимент</h3>
+
+        {% if shoes %}
+            <div class="product-list">
+    {% for item in shoes %}
+    <div class="product-card">
+        <!-- Левый блок: Фото -->
+        <div class="photo-container">
+            {% if item['Фото'] %}
+                <img src="/static/{{ item['Фото'] }}" alt="Фото товара">
+            {% else %}
+                <span>Нет фото</span>
+            {% endif %}
+        </div>
+        
+        <!-- Центральный блок Основная информация о товаре -->
+        <div class="info-container">
+            <h3>{{ item['Наименование товара'] }}</h3>
+            <ul>
+                <li><strong>Ед. изм.:</strong> {{ item['Единица измерения'] }}</li>
+                <li><strong>Цена (₽):</strong> {{ item['Цена'] }}</li>
+                <li><strong>Поставщик:</strong> {{ item['Поставщик'] }}</li>
+                <li><strong>Производитель:</strong> {{ item['Производитель'] }}</li>
+                <li><strong>Категория:</strong> {{ item['Категория товара'] }}</li>
+                <li><strong>На складе:</strong> {{ item['Кол-во на складе'] }}</li>
+                <li><strong>Описание:</strong> {{ item['Описание товара'] }}</li>
+            </ul>
+        </div>
+        
+        <!-- Правый блок: Действующая скидка -->
+        <div class="discount-container">
+            <p>Скидка: <strong>{{ item['Действующая скидка'] }}%</strong></p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Добавляем стили  -->
+<style>
+.product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.product-card {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr; /* Три колонки */
+    gap: 1rem;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.photo-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+.info-container ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.discount-container p {
+    font-size: large;
+    color: green;
+}
+</style>
+        {% else %}
+            <p style="text-align: center; color: #888;">ассортимент не загружен.</p>
+        {% endif %}
+    </div>
+    
+</body>
+</html>
